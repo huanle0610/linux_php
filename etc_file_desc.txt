@@ -1,0 +1,14 @@
+/etc 系统配置目录
+mime.types - mime type description file for cups
+#--------------------
+cat /etc/mime.types | less
+or
+man mime.types 
+to learn more about it
+#--------------------
+services - Internet network services list
+#--------------------
+ services  is  a  plain  ASCII  file  providing a mapping between human-
+friendly textual names for  internet  services,  and  their  underlying
+assigned  port  numbers  and  protocol types.
+#--------------------

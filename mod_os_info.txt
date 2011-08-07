@@ -1,0 +1,97 @@
+how to know my os version?
+① huanle0610@huanle0610-laptop:~$ cat /etc/lsb-release 
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=10.04
+DISTRIB_CODENAME=lucid
+DISTRIB_DESCRIPTION="Ubuntu 10.04.1 LTS"
+② huanle0610@huanle0610-laptop:~$ cat /proc/version
+Linux version 2.6.32-24-generic (buildd@rothera) (gcc version 4.4.3 (Ubuntu 4.4.3-4ubuntu5) ) #39-Ubuntu SMP Wed Jul 28 06:07:29 UTC 2010
+③ huanle0610@huanle0610-laptop:~$ uname -a
+Linux huanle0610-laptop 2.6.32-24-generic #39-Ubuntu SMP Wed Jul 28 06:07:29 UTC 2010 i686 GNU/Linux
+
+where is the kernel?
+huanle0610@huanle0610-laptop:~$ ls -lh /boot/
+总计 15M
+-rw-r--r-- 1 root root 637K 2010-07-28 19:07 abi-2.6.32-24-generic
+-rw-r--r-- 1 root root 114K 2010-07-28 19:07 config-2.6.32-24-generic
+drwxr-xr-x 3 root root 4.0K 2011-07-31 10:58 grub
+-rw-r--r-- 1 root root 7.7M 2011-04-17 00:08 initrd.img-2.6.32-24-generic
+-rw-r--r-- 1 root root 157K 2010-03-23 17:37 memtest86+.bin
+-rw-r--r-- 1 root root 1.7M 2010-07-28 19:07 System.map-2.6.32-24-generic
+-rw-r--r-- 1 root root 1.2K 2010-07-28 19:10 vmcoreinfo-2.6.32-24-generic
+-rw-r--r-- 1 root root 3.9M 2010-07-28 19:07 vmlinuz-2.6.32-24-generic    yeah , It's here.
+
+where is the module ?
+huanle0610@huanle0610-laptop:~$ ls  -1 /lib/modules/$(uname -r)/kernel
+arch    #与硬件选择有关的选项，例如CPU的等级
+crypto   #内核所支持的加密技术
+drivers  #硬件驱动程序，例如显卡，网卡，PCI相关硬件的
+fs       #内核所支持的文件系统，例如vfat, nfs
+lib      #一些函数库
+net      #与网络协议相关，防火墙等
+sound
+ubuntu
+huanle0610@huanle0610-laptop:~$ ls  -x /lib/modules/$(uname -r)/kernel/fs
+9p          adfs            affs            afs    autofs      autofs4   befs
+bfs         binfmt_aout.ko  binfmt_misc.ko  btrfs  cachefiles  cifs      coda
+configfs    cramfs          dlm             efs    exofs       exportfs  fat
+freevxfs    fscache         fuse            gfs2   hfs         hfsplus   hpfs
+isofs       jffs2           jfs             lockd  minix       ncpfs     nfs
+nfs_common  nfsd            nilfs2          nls    ntfs        ocfs2     omfs
+qnx4        quota           reiserfs        romfs  smbfs       squashfs  sysv
+ubifs       udf             ufs             xfs
+
+huanle0610@huanle0610-laptop:~$ file /lib/modules/$(uname -r)/kernel/net/ipv4/netfilter/arp_tables.ko
+/lib/modules/2.6.32-24-generic/kernel/net/ipv4/netfilter/arp_tables.ko: ELF 32-bit LSB relocatable, Intel 80386, version 1 (SYSV), not stripped
+
+
+内核模块依赖性
+modules.dep - List of module dependencie
+ The  modules.dep  as  generated  by module-init-tools depmod, lists the
+dependencies for  every  module  in  the  directories  under  /lib/mod‐
+ules/version, where modules.dep is.
+上面提到的命令：
+huanle0610@huanle0610-laptop:~$ depmod -V
+module-init-tools 3.11.1
+
+
+内核查看
+huanle0610@huanle0610-laptop:~$ lsmod | wc -l
+76
+加载75个模块
+huanle0610@huanle0610-laptop:~$ modinfo  ip_tables   #模块信息
+filename:       /lib/modules/2.6.32-24-generic/kernel/net/ipv4/netfilter/ip_tables.ko
+description:    IPv4 packet filter
+author:         Netfilter Core Team <coreteam@netfilter.org>
+license:        GPL
+srcversion:     DC70E5A33C988577C75C5E0
+depends:        x_tables
+vermagic:       2.6.32-24-generic SMP mod_unload modversions 586 
+
+模块加载与删除
+modprobe - program to add and remove modules from the Linux Kernel
+try it:
+sudo modprobe -r psmouse
+#now，you mouse or touchboard is not work?
+sudo modprobe psmouse
+#and now,it works again
+now，you mouse or touchboard is not work?
+
+
+内核模块的额外参数设置：
+MODPROBE.CONF(5)                                              MODPROBE.CONF(5)
+
+NAME
+       modprobe.d, modprobe.conf - Configuration directory/file for modprobe
+
+DESCRIPTION
+       Because  the  modprobe  command can add or remove more than one module,
+       due to module dependencies, we need a method of specifying what options
+       are  to  be used with those modules. All files underneath the /etc/mod‐
+       probe.d directory which end with  the  .conf  extension  specify  those
+       options  as  required. (the /etc/modprobe.conf file can also be used if
+       it exists, but that will be removed in a future version). They can also
+       be  used to create convenient aliases: alternate names for a module, or
+       they can override the normal modprobe  behavior  altogether  for  those
+       with special requirements (such as inserting more than one module).
+

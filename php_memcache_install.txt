@@ -1,0 +1,87 @@
+1.frist i get two file
+$ ls download/memcache
+memcache-2.2.4.tgz      memcached-1.4.6.tar.gz  
+
+2.install memcached
+./configure
+make -j6
+make install
+
+$ memcached -d -m 1024 -u root -l 127.0.0.1 -p 11211
+memcached: error while loading shared libraries: libevent-1.1a.so.1: cannot open shared object file: No such file or directory
+
+so 
+$ sudo agt-cache search libevent
+$ sudo apt-get install libevent-dev 
+
+$ memcached -d -m 1024 -u root -l 127.0.0.1 -p 11211
+memcached: error while loading shared libraries: libevent-1.1a.so.1: cannot open shared object file: No such file or directory
+$ sudo ln -s /usr/lib/libevent.so/usr/local/lib/libevent.so
+$ sudo ln -s /usr/lib/libevent.a /usr/local/lib/libevent.a
+$ sudo ln -s /usr/lib/libevent.la /usr/local/lib/libevent.la
+$ sudo ln -s /usr/lib/libevent.so /usr/lib/libevent-1.1a.so.1
+$ sudo ln -s /usr/lib/libevent.so /usr/local/lib/libevent-1.1a.so.1
+$ memcached -d -m 1024 -u root -l 127.0.0.1 -p 11211
+$ netstat -lnp | grep memcached
+（并非所有进程都能被检测到，所有非本用户的进程信息将不会显示，如果想看到所有信息，则必须切换到 root 用户）
+tcp        0      0 127.0.0.1:11211         0.0.0.0:*               LISTEN      21287/memcached 
+udp        0      0 127.0.0.1:11211         0.0.0.0:*                           21287/memcached 
+
+Oh,It works
+ 
+3 install memcache support for php
+/usr/local/php53/bin/phpize --clean
+/usr/local/php53/bin/phpize
+./configure --with-php-config=/usr/local/php53/bin/php-config
+make -j6
+make install
+
+4 
+$vi /usr/local/php53/etc/php.ini
+add following:
+extension= memcache.so
+
+$ php -m 
+mbstring
+mcrypt
+memcache *
+mhash
+mysql
+mysqli
+openss
+
+5 test
+
+<?php
+$memcache = new Memcache;
+$memcache->connect('localhost', 11211) or die ("Could not connect");
+
+$version = $memcache->getVersion();
+echo "Server's version: ".$version."<br/>\n";
+
+$tmp_object = new stdClass;
+$tmp_object->str_attr = 'test';
+$tmp_object->int_attr = 123;
+
+$memcache->set('key', $tmp_object, false, 10) or die ("Failed to save data at the server");
+echo "Store data in the cache (data will expire in 10 seconds)<br/>\n";
+
+$get_result = $memcache->get('key');
+echo "Data from the cache:<br/>\n";
+
+var_dump($get_result);
+?>
+
+$ php a.php
+Server's version: 1.4.6<br/>
+Store data in the cache (data will expire in 10 seconds)<br/>
+Data from the cache:<br/>
+object(stdClass)#3 (2) {
+  ["str_attr"]=>
+  string(4) "test"
+  ["int_attr"]=>
+  int(123)
+}
+---------------------------------------------------------------------
+END
+

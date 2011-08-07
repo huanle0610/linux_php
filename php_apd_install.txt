@@ -1,0 +1,69 @@
+1 get install file
+http://pecl.php.net/get/apd-1.0.1.tgz
+2 for 5.3.(>2)
+
+sudo /usr/local/php53/bin/phpize --clean
+sudo /usr/local/php53/bin/phpize
+sudo ./configure --with-php-config=/usr/local/php53/bin/php-config
+sudo vi php_apd.c *
+http://lists.freebsd.org/pipermail/freebsd-ports/2010-April/060557.html
+前因后果不再阐述，见下文：
+
+	2) error: 'struct _zend_compiler_globals' has no member named
+	'extended_info'
+
+	The member has been renamed to 'compiler_options' to hold additional
+	variables. So, for example, if the code looks like:
+
+	CG(extended_info) = 1;
+
+	you can modify it in this way:
+
+	CG(compiler_options) |= ZEND_COMPILE_EXTENDED_INFO;
+
+编辑967行修改之：
+vi /usr/local/src/apd-1.0.1/php_apd.c +967
+把CG(extended_info) = 1;
+修改为：
+CG(compiler_options) |= ZEND_COMPILE_EXTENDED_INFO;
+
+
+ 
+and then:
+vi /usr/local/php53/etc/php.ini
+add the following lines:
+	zend_extension = /usr/local/php53/lib/php/extensions/no-debug-non-zts-20090626/apd.so
+	apd.dumpdir = /usr/local/php53/trace
+	apd.statement_tracing = 0
+
+sudo mkdir /usr/local/php53/trace
+
+
+php -m 
+	huanle0610@huanle0610-laptop:/usr/local/php53$ php -m
+	[PHP Modules]
+	APD  * got it
+	bz2
+	Core
+	ctype
+	curl
+	date
+
+finally test:
+<?php
+echo "\n";
+echo date('Y m d',time());
+echo "\n";
+echo 'test start:';
+override_function('date', '$a,$b', 'echo "DOING TEST"; return $a * $b;');
+date(1,3);
+echo "\n";
+?>
+
+
+$ php a.php
+
+2011 07 23
+test start:DOING TEST
+$ 
+

@@ -1,0 +1,8 @@
+huanle0610@huanle0610-laptop:~$ cat /etc/lsb-release 
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=10.04
+DISTRIB_CODENAME=lucid
+DISTRIB_DESCRIPTION="Ubuntu 10.04.1 LTS"
+huanle0610@huanle0610-laptop:~$ uname -a
+Linux huanle0610-laptop 2.6.32-24-generic #39-Ubuntu SMP Wed Jul 28 06:07:29 UTC 2010 i686 GNU/Linux
+

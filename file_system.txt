@@ -1,0 +1,151 @@
+对应关系
+huanle0610@huanle0610-laptop:~$ df  | awk '{print $1 "\t" $6}' | grep -v 'none'
+文件系统	挂载点
+/dev/sda4	/
+/dev/sda7	/home
+/dev/sda9	/usr
+/dev/sda8	/var
+/dev/sda6	/media/E
+
+系统已知设备，need root
+huanle0610@huanle0610-laptop:~$ sudo fdisk -l | grep '/dev'
+Disk /dev/sda: 250.1 GB, 250059350016 bytes
+/dev/sda1   *           1        1275    10241406    c  W95 FAT32 (LBA)
+/dev/sda2            1276       28939   222209700+   f  W95 Ext'd (LBA)
+/dev/sda3           28940       29193     2040255   82  Linux swap / Solaris
+/dev/sda4           29194       30402     9704102   83  Linux
+/dev/sda5            1276       10199    71681998+   7  HPFS/NTFS
+/dev/sda6           10200       20398    81923436    7  HPFS/NTFS
+/dev/sda7           20399       22310    15358108+  83  Linux
+/dev/sda8           22311       25497    25599546   83  Linux
+/dev/sda9           25498       28939    27646484+  83  Linux
+
+系统使用量
+huanle0610@huanle0610-laptop:~$ df -h | grep -v '^none'
+文件系统            容量  已用  可用 已用%% 挂载点
+/dev/sda4             9.2G  2.1G  6.7G  24% /
+/dev/sda7              15G  4.0G  9.8G  29% /home
+/dev/sda9              26G  6.4G   19G  26% /usr
+/dev/sda8              25G  2.3G   21G  10% /var
+/dev/sda6              79G   18G   61G  23% /media/E
+
+
+查看目前加载状态
+huanle0610@huanle0610-laptop:~/tmp$ sudo blkid -o  list
+device     fs_type label    mount point    UUID
+-------------------------------------------------------------------------------
+/dev/sda1  vfat    C        (not mounted)  8C68-6106
+/dev/sda3  swap    SWAP-sda3 <swap>        
+/dev/sda4  ext3             /              d6c1bbcf-c365-4986-bd77-29d6964333a5
+/dev/sda5  ntfs    D        (not mounted)  24C0594BC05923F8
+/dev/sda6  ntfs    E        /media/E       E05C6B375C6B081C
+/dev/sda7  ext3             /home          5911f218-e5e2-471e-95fb-dcf10e6c398e
+/dev/sda8  ext3             /var           57fb402e-6ca0-4d31-91e8-98e0310f7c01
+/dev/sda9  ext3             /usr           2e98e093-fee5-4095-b12d-31be8303f981
+
+更详细的加载状态
+huanle0610@huanle0610-laptop:~/tmp$ sudo mount -l
+/dev/sda4 on / type ext3 (rw,errors=remount-ro,commit=0)
+proc on /proc type proc (rw,noexec,nosuid,nodev)
+none on /sys type sysfs (rw,noexec,nosuid,nodev)
+fusectl on /sys/fs/fuse/connections type fusectl (rw)
+none on /sys/kernel/debug type debugfs (rw)
+none on /sys/kernel/security type securityfs (rw)
+none on /dev type devtmpfs (rw,mode=0755)
+none on /dev/pts type devpts (rw,noexec,nosuid,gid=5,mode=0620)
+none on /dev/shm type tmpfs (rw,nosuid,nodev)
+none on /var/run type tmpfs (rw,nosuid,mode=0755)
+none on /var/lock type tmpfs (rw,noexec,nosuid,nodev)
+none on /lib/init/rw type tmpfs (rw,nosuid,mode=0755)
+/dev/sda7 on /home type ext3 (rw,commit=0)
+/dev/sda9 on /usr type ext3 (rw,commit=0)
+/dev/sda8 on /var type ext3 (rw,commit=0)
+binfmt_misc on /proc/sys/fs/binfmt_misc type binfmt_misc (rw,noexec,nosuid,nodev)
+gvfs-fuse-daemon on /home/huanle0610/.gvfs type fuse.gvfs-fuse-daemon (rw,nosuid,nodev,user=huanle0610)
+/dev/sda6 on /media/E type fuseblk (rw,nosuid,nodev,allow_other,blksize=4096,default_permissions) [E]
+
+
+查看目录使用量
+huanle0610@huanle0610-laptop:~$ du -sh phpvim
+5.4M	phpvim
+
+使用量占比前10目录或文件
+huanle0610@huanle0610-laptop:~$ du -sck * | sort -rn | head -n 10
+1834208	总计
+721172	文档
+496044	下载
+197428	视频
+144944	sent
+95288	桌面
+70492	音乐
+41780	work
+16084	thinkphp
+12484	libexec
+
+
+磁盘分区介绍
+huanle0610@huanle0610-laptop:~$ sudo fdisk /dev/sda
+
+WARNING: DOS-compatible mode is deprecated. It's strongly recommended to
+         switch off the mode (command 'c') and change display units to
+         sectors (command 'u').
+
+Command (m for help): p
+
+Disk /dev/sda: 250.1 GB, 250059350016 bytes
+255 heads, 63 sectors/track, 30401 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk identifier: 0x7ef97ef9
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sda1   *           1        1275    10241406    c  W95 FAT32 (LBA)
+/dev/sda2            1276       28939   222209700+   f  W95 Ext'd (LBA)
+/dev/sda3           28940       29193     2040255   82  Linux swap / Solaris
+/dev/sda4           29194       30402     9704102   83  Linux
+/dev/sda5            1276       10199    71681998+   7  HPFS/NTFS
+/dev/sda6           10200       20398    81923436    7  HPFS/NTFS
+/dev/sda7           20399       22310    15358108+  83  Linux
+/dev/sda8           22311       25497    25599546   83  Linux
+/dev/sda9           25498       28939    27646484+  83  Linux
+解读：
+a. 250G硬盘，30401个柱面,每个柱面通过255的磁头管理读写，每个磁头管理63个扇区，
+每个扇区均为512bytes.
+30401*255*63*512 = 250056737280~250G
+b.?为什么/dev/sda4 END 30402>30401
+
+
+
+how to load an iso file
+huanle0610@huanle0610-laptop:~$ sudo mkdir /mnt/ubuntu_dvd
+[sudo] password for huanle0610: 
+huanle0610@huanle0610-laptop:~$ sudo mount -o loop /media/E/ubuntu-10.04.1-desktop-i386.iso /mnt/ubuntu_dvd
+huanle0610@huanle0610-laptop:~$ df
+文件系统           1K-块        已用     可用 已用% 挂载点
+/dev/sda4              9551628   2122912   6943512  24% /
+none                   1023264       384   1022880   1% /dev
+none                   1028304       336   1027968   1% /dev/shm
+none                   1028304        96   1028208   1% /var/run
+none                   1028304         0   1028304   0% /var/lock
+none                   1028304         0   1028304   0% /lib/init/rw
+/dev/sda7             15116836   3895780  10453152  28% /home
+/dev/sda8             25197220   2333608  21583636  10% /var
+/dev/sda9             27212536   6651388  19178824  26% /usr
+/dev/sda6             81923432  18221892  63701540  23% /media/E
+/dev/loop0              702016    702016         0 100% /mnt/ubuntu_dvd
+huanle0610@huanle0610-laptop:~$ sudo ls -l /mnt/ubuntu_dvd
+总计 1467
+-r--r--r-- 1 root root     143 2010-08-16 18:17 autorun.inf
+dr-xr-xr-x 2 root root    2048 2010-08-16 18:19 casper
+dr-xr-xr-x 3 root root    2048 2010-08-16 18:18 dists
+dr-xr-xr-x 2 root root    2048 2010-08-16 18:19 install
+dr-xr-xr-x 2 root root   16384 2010-08-16 18:19 isolinux
+-r--r--r-- 1 root root    4532 2010-08-16 18:19 md5sum.txt
+dr-xr-xr-x 2 root root    2048 2010-08-16 18:18 pics
+dr-xr-xr-x 4 root root    2048 2010-08-16 18:18 pool
+dr-xr-xr-x 2 root root    2048 2010-08-16 18:18 preseed
+-r--r--r-- 1 root root     227 2010-08-16 18:18 README.diskdefines
+lr-xr-xr-x 1 root root       1 2010-08-16 18:18 ubuntu -> .
+-r--r--r-- 1 root root 1467844 2010-07-09 00:55 wubi.exe
+

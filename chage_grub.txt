@@ -1,0 +1,19 @@
+更改开机默认系统
+ubuntu10.04以前
+sudo vi /boot/grub/menu.lst
+修改
+	default 0
+
+ubuntu10.04以后
+sudo vi /boot/grub/grub.cfg
+	set default=4
+为什么是4？
+huanle0610@huanle0610-laptop:~$ grep -n 'menuentry' /boot/grub/grub.cfg 
+64:menuentry 'Ubuntu, with Linux 2.6.32-24-generic' --class ubuntu --class gnu-linux --class gnu --class os {
+72:menuentry 'Ubuntu, with Linux 2.6.32-24-generic (recovery mode)' --class ubuntu --class gnu-linux --class gnu --class os {
+85:menuentry "Memory test (memtest86+)" {
+91:menuentry "Memory test (memtest86+, serial console 115200)" {
+100:menuentry "Microsoft Windows XP Professional (on /dev/sda1)" {
+
+
+
