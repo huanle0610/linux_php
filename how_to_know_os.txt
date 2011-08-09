@@ -5,4 +5,62 @@ DISTRIB_CODENAME=lucid
 DISTRIB_DESCRIPTION="Ubuntu 10.04.1 LTS"
 huanle0610@huanle0610-laptop:~$ uname -a
 Linux huanle0610-laptop 2.6.32-24-generic #39-Ubuntu SMP Wed Jul 28 06:07:29 UTC 2010 i686 GNU/Linux
+1. how to konow battery info 
+cat /proc/acpi/battery/BAT1/info
+present:                 yes
+design capacity:         4752 mAh
+last full capacity:      4752 mAh
+battery technology:      rechargeable
+design voltage:          11100 mV
+design capacity warning: 420 mAh
+design capacity low:     143 mAh
+capacity granularity 1:  264 mAh
+capacity granularity 2:  3780 mAh
+model number:            PABAS024
+serial number:           3658Q
+battery type:            LION
+OEM info:                LG 
+1.1 battery status
 
+cat /proc/acpi/battery/BAT1/state
+present:                 yes
+capacity state:          ok
+charging state:          discharging
+present rate:            1280 mA
+remaining capacity:      4134 mAh
+present voltage:         11747 mV
+
+2 how to know handware configure
+a very good command
+sudo lshw
+or
+sudo dmidecode
+
+3 how to use md5sum for check file or something?
+
+I will check Ubuntu 10.04.1 LTS i386 iso,which is on my windows E:\
+In fact,I can only check the iso file md5sum and cmpare with the string web site offer.But aslo can check every file.
+$ sudo blkid -o  list
+device                                          fs_type         label            mount point                                         UUID
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/dev/sda1                                       vfat            C                (not mounted)                                       8C68-6106
+/dev/sda3                                       swap            SWAP-sda3        <swap>                                              
+/dev/sda4                                       ext3                             /                                                   d6c1bbcf-c365-4986-bd77-29d6964333a5
+/dev/sda5                                       ntfs            D                (not mounted)                                       24C0594BC05923F8
+/dev/sda6                                       ntfs            E                (not mounted)                                       05C6B375C6B081C
+/dev/sda7                                       ext3                             /home                                               5911f218-e5e2-471e-95fb-dcf10e6c398e
+/dev/sda8                                       ext3                             /var                                                57fb402e-6ca0-4d31-91e8-98e0310f7c01
+/dev/sda9                                       ext3                             /usr                                                2e98e093-fee5-4095-b12d-31be8303f981
+So,I know I must mount /dev/sda6. It's E on windows.
+$ sudo mkdir /mnt/E
+$ sudo mount /dev/sda6 /mnt/E
+$ ls /mnt/E
+$ sudo mkdir /mnt/ubuntu_DVD
+I use this open iso file
+$ sudo mount -o loop /mnt/E/ubuntu-10.04.1-desktop-i386.iso /mnt/ubuntu_DVD
+$ ls /mnt/ubuntu_DVD/
+Calc md5 
+$ md5sum /mnt/ubuntu_DVD/wubi.exe 
+$ man md5sum
+$ cd /mnt/ubuntu_DVD
+$ md5sum -c ./* md5sum.txt 
