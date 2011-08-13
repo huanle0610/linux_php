@@ -1,0 +1,21 @@
+快速在一个新的环境中上网：
+1.IP
+huanle0610@huanle0610-laptop:~$ sudo ifconfig eth0 192.168.1.129
+2.route
+huanle0610@huanle0610-laptop:~$ sudo route add default gw 192.168.1.1
+[sudo] password for huanle0610: 
+huanle0610@huanle0610-laptop:~$ route
+内核 IP 路由表
+目标            网关            子网掩码        标志  跃点   引用  使用 接口
+192.168.1.0     *               255.255.255.0   U     0      0        0 eth0
+default         bogon           0.0.0.0         UG    0      0        0 eth0
+3. dns(resolv.conf)
+huanle0610@huanle0610-laptop:~$ cat "nameserver 202.102.224.68\nnameserver 202.102.227.68">resolv.conf_txt
+cat: nameserver 202.102.224.68\nnameserver 202.102.227.68: 没有那个文件或目录
+huanle0610@huanle0610-laptop:~$ sudo echo -e "nameserver 202.102.224.68\nnameserver 202.102.227.68">/etc/resolv.conf
+huanle0610@huanle0610-laptop:~$ cat /etc/resolv.conf
+nameserver 202.102.224.68
+nameserver 202.102.227.68
+
+ping baidu.com
+
