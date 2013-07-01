@@ -1,0 +1,48 @@
+find /etc -name "*" -exec grep -H "192.168.0.1" {} \;   在/etc目录下找寻包含“192.168.0.1”的行，打印出来文件名和找到的行。
+find /etc -name "*" -exec grep -l "192.168.0.1" {} \;   在/etc目录下找寻包含“192.168.0.1”的行，打印出来文件名。
+find /etc -name "*" -exec grep  "192.168.0.1" {} \;   在/etc目录下找寻包含“192.168.0.1”的行，打印出来找到的行。
+find  -cmin -15 |  xargs rm -rf 查看/home/hl目录下15分钟内有变动的文件
+find -type f -name "*" | xargs sed -i 's/lan\ g/lang/g'     lan g   改为lang
+rename 's/\d_(.*)/$1/' *      1_dfsdfds.here.txt   dfsdfds.here.txt
+rename 's/([^.]*)\.png/$1.gif/' *   abc.png abc.gif
+for i in `ls`; do iconv -f gbk -t utf8 $i >${i}_utf8; done  批量转换编码
+可读方式显示当前文件夹的大小
+
+du有个参数：
+--max-depth=N      只显示参数指定的目录 N 层或以内的子目录的总用量
+(若使用 --all 选项，也会显示文件的占用量)；
+--max-depth=0 的效果等于 --summarize
+iconv -f gb2312 -t utf-8 desktop/万年历定置.html >wnl.html把文件从gb2312转化为utf－8编码
+配置虚拟网卡：
+ifconfig eth0:1 192.168.3.245
+echo -n "123456"  | md5sum                     shell 对字符串进行md5加密，echo -n意在不输出\n
+-n     do not output the trailing newline
+ln -s 桌面 ~/desktop  在指定目录下～（目录下创建指定名字（desktop）的链接）,目标为桌面
+alias restart-php="cat /var/run/php/php-fpm.pid  | xargs kill -SIGUSR2"  重启php的一种实现
+du -sh  ~/* | sort  显示目录大小
+date +%s -r zexpl     查看zexpl 的时间戳
+hl@hl-laptop:~/mywork/php_learn$ stat -c %Y zexpl
+1293497402
+hl@hl-laptop:~/mywork/php_learn$ date +%s -r zexpl
+1293497402
+php -r 'echo date("U", fileatime("db"));'  文件的时间戳
+df -Th  显示磁盘详细信息
+huanle0610@huanle0610-laptop:~/tmp$ df -Th
+Filesystem    Type    Size  Used Avail Use% Mounted on
+/dev/sda4     ext3    9.2G  1.7G  7.1G  19% /
+none      devtmpfs   1001M  380K 1000M   1% /dev
+none         tmpfs   1005M  1.4M 1003M   1% /dev/shm
+none         tmpfs   1005M   80K 1005M   1% /var/run
+none         tmpfs   1005M     0 1005M   0% /var/lock
+none         tmpfs   1005M     0 1005M   0% /lib/init/rw
+/dev/sda7     ext3     15G  2.5G   12G  19% /home
+/dev/sda9     ext3     26G  3.8G   21G  16% /usr
+/dev/sda8     ext3     25G  907M   22G   4% /var
+/dev/sda6  fuseblk     79G   20G   60G  25% /media/E
+alias getmyip="lynx -dump www.whatismyip.com | grep 'Your IP Address Is' | sed 's/^.*:/'
+复制目录结构，但是不复制文件的命令
+find /var/www/dz_svn -type d | sed 's/\/var\/www\/dz_svn\///' | xargs  mkdir -p
+类似的功能，却是不一样的实现，这个更好点
+tar cf - source/function/function_connect.php | tar xf - -C /home/hl/desktop/dz2_qq_connect/
+grep -rl 'p_var\|p_alert\|p_echo\|pnewline\|get_var_tfile' source/*  或
+

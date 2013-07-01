@@ -1,0 +1,10 @@
+SQLyog SSH 隧道连接MySQL
+MySQL 主机地址/用户名/密码/端口/数据库 均填写在MySQL主机本地操作
+上连接时填写的内容.
+SSH 
+使用SSH隧道
+填写下面的信息
+
+对端调试:
+
+-rw-r----- 1 syslog adm 3994483 Apr  6 08:48 /var/log/auth.log

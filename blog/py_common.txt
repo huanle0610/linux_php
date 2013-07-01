@@ -1,0 +1,7 @@
+1 随机大字字母或数字32位
+
+import string
+import random
+secret_key = ''.join(random.choice(string.ascii_uppercase + string.digits)
+                         for x in xrange(32))
+

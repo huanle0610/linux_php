@@ -1,0 +1,119 @@
+~/download$ aria2c -s 12 http://www.swftools.org/swftools-0.9.2.tar.gz
+
+~/download$ tar -tf swftools-0.9.2.tar.gz 
+swftools-0.9.2/src/swfcombine.1
+swftools-0.9.2/src/swfstrings.1
+swftools-0.9.2/src/swfdump.1
+swftools-0.9.2/src/swfextract.1
+swftools-0.9.2/src/jpeg2swf.1
+swftools-0.9.2/src/png2swf.1
+...
+...
+
+~/download$ cd swftools-0.9.2/
+~/download/swftools-0.9.2$ ls
+AUTHORS       config.sub    INSTALL     Makefile.common.in  src
+avi2swf       configure     install-sh  Makefile.in         swfs
+ChangeLog     configure.in  lib         missing
+config.guess  COPYING       ltmain.sh   mkinstalldirs
+config.h.in   doc           m4          setup.py
+
+~/download/swftools-0.9.2$ ./configure --prefix=/usr/local/swftool
+...
+***************************************************
+* The following headers/libraries are missing:  ungif gif_lib.h
+* Disabling gif2swf tool...
+***************************************************
+configure: creating ./config.status
+config.status: creating Makefile.common
+config.status: WARNING:  'Makefile.common.in' seems to ignore the --datarootdir setting
+config.status: creating Makefile
+config.status: creating lib/Makefile
+config.status: creating lib/action/Makefile
+config.status: creating src/Makefile
+config.status: creating lib/pdf/Makefile
+config.status: creating swfs/Makefile
+config.status: creating lib/readers/Makefile
+config.status: creating config.h
+
+/download/swftools-0.9.2$ sudo apt-cache search ungif
+[sudo] password for huanle0610: 
+giflib-tools - library for GIF images (utilities)
+libgif-dev - library for GIF images (development)
+libgif4 - library for GIF images (library)
+huanle0610@huanle0610.info:~/download/swftools-0.9.2$ sudo apt-get install libgif-dev
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+...
+Setting up libgif-dev (4.1.6-9ubuntu1) ...
+
+~/download/swftools-0.9.2$ ./configure --prefix=/usr/local/swftool
+~/download/swftools-0.9.2$ make -j6
+making all in m4...
+cd m4;make all
+...
+./PreLoaderTemplate || true
+make[1]: Leaving directory `/home/huanle0610/download/swftools-0.9.2/swfs'
+make[1]: Entering directory `/home/huanle0610/download/swftools-0.9.2'
+make[1]: Leaving directory `/home/huanle0610/download/swftools-0.9.2'
+
+$ sudo make install
+
+/usr/bin/install -c -m 644 ./swft_loader.swf /usr/local/swftool/share/swftools/swfs/swft_loader.swf
+rm -f /usr/local/swftool/share/swftools/swfs/default_viewer.swf -o -L /usr/local/swftool/share/swftools/swfs/default_viewer.swf
+rm: invalid option -- 'o'
+Try `rm --help' for more information.
+make[1]: *** [install] Error 1
+make[1]: Leaving directory `/home/huanle0610/download/swftools-0.9.2/swfs'
+make: *** [install] Error 2
+
+~/download/swftools-0.9.2$ grep -rn "\-o \-L" ./*
+./swfs/Makefile.in:44:	rm -f $(pkgdatadir)/swfs/default_viewer.swf -o -L $(pkgdatadir)/swfs/default_viewer.swf
+./swfs/Makefile.in:46:	rm -f $(pkgdatadir)/swfs/default_loader.swf -o -L $(pkgdatadir)/swfs/default_loader.swf
+./swfs/Makefile:44:	rm -f $(pkgdatadir)/swfs/default_viewer.swf -o -L $(pkgdatadir)/swfs/default_viewer.swf
+./swfs/Makefile:46:	rm -f $(pkgdatadir)/swfs/default_loader.swf -o -L $(pkgdatadir)/swfs/default_loader.swf
+
+$ vi ./swfs/Makefile                # rm two line
+$ sudo make install
+$ make clean ; make distclean ;     # clean disk
+
+$ ll /usr/local/swftool/bin/pdf2swf 
+-rwxr-xr-x 1 root root 3160624 May 16 01:19 /usr/local/swftool/bin/pdf2swf*
+
+
+
+TEST
+$ /usr/local/swftool/bin/pdf2swf --help
+
+Usage: /usr/local/swftool/bin/pdf2swf [-options] file.pdf -o file.swf
+
+-h , --help                    Print short help message and exit
+-V , --version                 Print version info and exit
+-o , --output file.swf         Direct output to file.swf. If file.swf contains '%' (file%.swf), then each page goes to a separate file.
+-p , --pages range             Convert only pages in range with range e.g. 1-20 or 1,4,6,9-11 or
+-P , --password password       Use password for deciphering the pdf.
+-v , --verbose                 Be verbose. Use more than one -v for greater effect.
+-z , --zlib                    Use Flash 6 (MX) zlib compression.
+-i , --ignore                  Allows pdf2swf to change the draw order of the pdf. This may make the generated
+-j , --jpegquality quality     Set quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:85)
+-s , --set param=value         Set a SWF encoder specific parameter.  See pdf2swf -s help for more information.
+-w , --samewindow              When converting pdf hyperlinks, don't make the links open a new window. 
+-t , --stop                    Insert a stop() command in each page. 
+-T , --flashversion num        Set Flash Version in the SWF header to num.
+-F , --fontdir directory       Add directory to the font search path.
+-b , --defaultviewer           Link a standard viewer to the swf file. 
+-l , --defaultloader           Link a standard preloader to the swf file which will be displayed while the main swf is loading.
+-B , --viewer filename         Link viewer filename to the swf file. 
+-L , --preloader filename      Link preloader filename to the swf file. 
+-q , --quiet                   Suppress normal messages.  Use -qq to suppress warnings, also.
+-S , --shapes                  Don't use SWF Fonts, but store everything as shape.
+-f , --fonts                   Store full fonts in SWF. (Don't reduce to used characters).
+-G , --flatten                 Remove as many clip layers from file as possible. 
+-I , --info                    Don't do actual conversion, just display a list of all pages in the PDF.
+-Q , --maxtime n               Abort conversion after n seconds. Only available on Unix.
+
+cd/files/file/20130516$ /usr/local/swftool/bin/pdf2swf 13686394303088.pdf -o test2.swf -f -T 9 -t -s storeallcharacters
+cd/files/file/20130516$ /usr/local/swftool/bin/pdf2swf 13686394303088.pdf -o test2%.swf -f -T 9 -t -s storeallcharacters
+
+字体不佳，还需改进。

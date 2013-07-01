@@ -1,0 +1,2 @@
+ubuntu 设置时区
+    sudo cp /usr/share/zoneinfo/Asia/Chongqing /etc/localtime

@@ -1,0 +1,24 @@
+$ mkdir cloudream
+$ ls
+cloudream  gitest  gitosis-admin
+$ cd cloudream/
+$ git init
+Initialized empty Git repository in /var/huanle0610/git/cloudream/.git/
+$ ll
+total 12
+drwxrwxr-x 3 huanle0610 huanle0610 4096 Apr  4 18:23 ./
+drwxrwxr-x 6 huanle0610 huanle0610 4096 Apr  4 18:23 ../
+drwxrwxr-x 7 huanle0610 huanle0610 4096 Apr  4 18:23 .git/
+$ git add .
+$ git commit -m 'init commit' --allow-empty
+[master (root-commit) e3fb46f] init commit
+$ git remote add origin mygit:cloudream
+$ git push --all
+Enter passphrase for key '/home/huanle0610/.ssh/id_rsa': 
+Initialized empty Git repository in /home/git/repositories/cloudream.git/
+Counting objects: 2, done.
+Writing objects: 100% (2/2), 158 bytes, done.
+Total 2 (delta 0), reused 0 (delta 0)
+To mygit:cloudream
+ * [new branch]      master -> master
+$ 

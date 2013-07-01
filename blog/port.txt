@@ -1,0 +1,6 @@
+本地开发端口
+netstat -an | grep 3306
+tcp        0      0 127.0.0.1:3306          0.0.0.0:*               LISTEN 
+
+sudo netstat -apn | grep ssh
+

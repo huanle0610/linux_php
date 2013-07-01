@@ -1,0 +1,5 @@
+openSUSE 常用操作
+1. 双击 可执行文件运行
+Files -> Preferences -> Behavior -> Executable Text Files
+选择 Run executable text files when they are opened  OR
+     Ask each time
