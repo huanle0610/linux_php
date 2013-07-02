@@ -1,0 +1,13 @@
+将你的翻墙命令加入alias如下（可加入.bashrc)，下次要翻墙时便可键入foxproxy命令一键搞定:
+
+alias foxproxy=' ssh -NCqf -D 8080 user@remotehost'
+
+选项解释：
+
+-N: 启动ssh但不执行远端命令，即将ssh作为一个连接服务运行。
+
+-C: compress. 压缩数据。
+
+-q: quiet. 抑制输出。
+
+-f: 输入密码后立即进入后台运行。

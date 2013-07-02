@@ -46,3 +46,6 @@ find /var/www/dz_svn -type d | sed 's/\/var\/www\/dz_svn\///' | xargs  mkdir -p
 tar cf - source/function/function_connect.php | tar xf - -C /home/hl/desktop/dz2_qq_connect/
 grep -rl 'p_var\|p_alert\|p_echo\|pnewline\|get_var_tfile' source/*  或
 
+设定目录权限644，文件权限644
+    find . -type f -exec chmod 644 {} \;
+    find . -type d -exec chmod 755 {} \;
