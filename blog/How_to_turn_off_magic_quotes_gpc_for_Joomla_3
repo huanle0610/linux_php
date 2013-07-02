@@ -1,0 +1,27 @@
+
+For MAMP
+
+Steps:
+Go to MAMP application >> Preferences (button) >> PHP (tab) >> Choose 5.3.1 or greater >> choose OK.
+Go to the MAMP folder >> bin >> php >> php5.3.6 >> conf >> edit php.ini >> add "magic_quotes_gpc = Off" a few lines above "magic_quotes_sybase = Off".
+Restart MAMP's servers.
+For most mainstream hosting companies running a CGI-Webinterface
+
+Steps:
+Create a php.ini file with the following:
+magic_quotes_gpc = Off
+extension=pdo.so
+extension=pdo_mysql.so
+Put it in your Joomla 3 root. Then change the htaccess.txt in your Joomla 3 root to .htaccess. Add the following lines to the .htaccess file (at the top) :
+<IfModule mod_suphp.c>
+  suPHP_ConfigPath /home/myusername/public_html/yourJ3folder
+  <Files php.ini>
+    order allow,deny
+    deny from all
+  </Files>
+</IfModule>
+Change "myusername" and "yourJ3folder" to your respective folders. The "/home/myusername/public_html/yourJ3folder" can be found via the Global Configuration:
+In Joomla backend > System > System Information > [Directory Permissions], the folder is usually the same as the log directory (but without /logs at the end).
+.htaccess for some hosts
+
+For some hosts, add "php_flag magic_quotes_gpc off" to the .htaccess file
