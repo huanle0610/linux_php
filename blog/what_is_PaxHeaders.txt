@@ -1,0 +1,58 @@
+bsdtar and PaxHeader directories
+
+Tim Kientzle kientzle at freebsd.org 
+Sat Aug 21 15:58:50 PDT 2004
+Previous message: sysinstall creates PaxHeader directories
+Next message: LOR
+Messages sorted by: [ date ] [ thread ] [ subject ] [ author ]
+Kris Kennaway wrote:
+>>Michiel Boland wrote:
+>>
+>>>Hi. Last week I did a rebuild from scratch by doing a make release and 
+>>>using the resulting cdrom. I notice that sysinstall creates several 
+>>>directories called 'PaxHeader'.
+> 
+> FYI, I'm seeing this in package builds too, when running
+>      ssh client bsdtar c | gtar x
+
+This will no doubt soon be an FAQ, so just
+for the record:
+
+  * These directories only appear if the archive
+    contains "pax extended attributes" and the program
+    reading the archive doesn't understand this extension.
+
+  * In particular, FreeBSD's cpio and pax programs do
+    not understand this extension, nor does gtar 1.13.
+
+  * Programs that do understand this extension include:
+    bsdtar, star, gtar 1.14, and any pax
+    implementation that complies with POSIX.1-2001.
+
+  * You can specify --format=ustar or -o when creating
+    the archive to suppress all extended attributes.
+    Conversely, you can specify --format=pax to force
+    the use of extended attributes.
+
+  * By default, extended attribute entries are only created
+    if there are file properties that can't be stored in the
+    regular ustar header.
+
+    The list of triggers includes: file flags, long link names,
+    long file names, non-ASCII characters, extended ACLs,
+    and timestamps prior to 1970 or after 2037.
+
+  * bsdtar is opportunistic.  If it's going to write extended
+    attributes anyway, it will include some additional information,
+    including:  inode number, device number, link count, ctime, atime,
+    high-resolution mtime.  None of these by themselves will trigger
+    an extended attribute entry, however.
+
+  * If you're seeing "PaxHeader" directories when you don't
+    expect them, check the corresponding files to see why
+    the attributes are being triggered.  The PaxHeader files
+    are themselves text files, so you can just read them to
+    get some clues about what's going on.  File flags, long file
+    names, and long link names are likely culprits.
+
+Tim
